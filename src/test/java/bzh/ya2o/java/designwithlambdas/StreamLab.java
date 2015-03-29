@@ -1,4 +1,4 @@
-package bzh.ya2o.java;
+package bzh.ya2o.java.designwithlambdas;
 
 import org.junit.Test;
 
@@ -142,6 +142,67 @@ public class StreamLab {
                         groupingBy(
                                 person -> person.getName().charAt(0),
                                 reducing(BinaryOperator.maxBy(comparing(Person::getAge)))
+                        )
+                );
+        System.out.println("Oldest Person Of Each Letter: " + oldestPersonOfEachLetter);
+    }
+
+    @Test
+    public void oldestPersonOfEachLetter_comparator() {
+        Comparator<Person> byAge = Comparator.comparing(Person::getAge);
+        Map<Character, Optional<Person>> oldestPersonOfEachLetter =
+                people.stream()
+                        .collect(
+                                groupingBy(
+                                        person -> person.getName().charAt(0),
+                                        reducing(BinaryOperator.maxBy(byAge))
+                                )
+                        );
+        System.out.println("Oldest person of each letter:");
+        System.out.println(oldestPersonOfEachLetter);
+    }
+
+    @Test
+    public void oldestPersonOfEachLetter_maxBy() {
+        Comparator<Person> byAge = Comparator.comparing(Person::getAge);
+        Map<Character, Optional<Person>> oldestPersonOfEachLetter =
+                people.stream()
+                        .collect(
+                                groupingBy(
+                                        person -> person.getName().charAt(0),
+                                        maxBy(byAge)
+                                )
+                        );
+        System.out.println("Oldest person of each letter:");
+        System.out.println(oldestPersonOfEachLetter);
+    }
+
+    @Test
+    public void oldestPersonOfEachLetter_foldingWithDummyToRemoveOptionalFromResult() {
+        Comparator<Person> byAge = Comparator.comparing(Person::getAge);
+        Map<Character, Person> oldestPersonOfEachLetter =
+                people.stream()
+                        .collect(
+                                groupingBy(
+                                        person -> person.getName().charAt(0),
+                                        reducing(new Person("Dummy", -1), BinaryOperator.maxBy(byAge))
+                                )
+                        );
+        System.out.println("Oldest person of each letter:");
+        System.out.println(oldestPersonOfEachLetter);
+    }
+
+
+    @Test
+    public void oldestPersonOfEachLetter_NoOptionalInResult() {
+        final Map<Character, Person> oldestPersonOfEachLetter = people.stream()
+                .collect(
+                        groupingBy(
+                                person -> person.getName().charAt(0),
+                                collectingAndThen(
+                                        reducing(BinaryOperator.maxBy(comparing(Person::getAge))),
+                                        Optional::get
+                                )
                         )
                 );
         System.out.println("Oldest Person Of Each Letter: " + oldestPersonOfEachLetter);

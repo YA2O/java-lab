@@ -1,4 +1,4 @@
-package bzh.ya2o.java.designwithlambdas;
+package bzh.ya2o.java.designwithlambdas.recursion;
 
 import org.junit.Test;
 

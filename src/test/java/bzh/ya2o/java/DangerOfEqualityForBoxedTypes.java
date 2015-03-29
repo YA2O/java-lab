@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class DangerOfEquality {
+public class DangerOfEqualityForBoxedTypes {
     @Test
     public void ok() {
         final Integer i = 127;
